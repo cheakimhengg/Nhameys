@@ -11,7 +11,7 @@
     </el-button>
 
     <el-segmented
-      v-model="value"
+      v-model="selectedCategory"
       @change="navigateToCategory"
       :options="paginatedCategories"
       block
@@ -33,6 +33,8 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue';
+import type { FoodCategory } from '@/models/Menu';
+import { debounce } from '@/composable/commonHelper';
 
 const props = defineProps({
   filteredFoodData: {
@@ -41,7 +43,7 @@ const props = defineProps({
   },
 });
 
-const value = ref('');
+const selectedCategory = ref('');
 const itemsPerPage = ref(0);
 const currentPage = ref(1);
 const categories = ref<string[]>([]);
@@ -49,8 +51,10 @@ const categories = ref<string[]>([]);
 watch(
   () => props.filteredFoodData,
   (newData) => {
-    categories.value = [...new Set(newData.map((item) => item.category))];
-    value.value = categories.value[0] || '';
+    categories.value = [
+      ...new Set((newData as FoodCategory[]).map((item: FoodCategory) => item.category)),
+    ];
+    selectedCategory.value = categories.value[0] || '';
   },
   { immediate: true }
 );
@@ -75,7 +79,7 @@ const nextPage = () => {
   }
 };
 
-const navigateToCategory = (value) => {
+const navigateToCategory = (value: string) => {
   const categoryElement = document.querySelector(`[data-category="${value}"]`);
   if (categoryElement) {
     const offset = window.innerWidth >= 1024 ? 155 : 140;
@@ -89,14 +93,6 @@ const navigateToCategory = (value) => {
   }
 };
 
-function debounce(func, delay) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
 const updateVisibleCategoryOnScroll = debounce(() => {
   const categoryElements = Array.from(document.querySelectorAll('[data-category]'));
   const offset = window.innerWidth >= 1024 ? 155 : 140;
@@ -106,7 +102,7 @@ const updateVisibleCategoryOnScroll = debounce(() => {
     const adjustedTop = rect.top - offset;
 
     if (adjustedTop >= 0 && adjustedTop <= window.innerHeight / 2) {
-      value.value = element.getAttribute('data-category') as string;
+      selectedCategory.value = element.getAttribute('data-category') as string;
       break;
     }
   }
@@ -120,7 +116,7 @@ const updateItemsPerPage = () => {
   const itemWidth = 140;
   itemsPerPage.value = Math.floor(containerWidth / itemWidth);
 
-  const selectedCategoryIndex = categories.value.indexOf(value.value);
+  const selectedCategoryIndex = categories.value.indexOf(selectedCategory.value);
   const totalVisibleItems = itemsPerPage.value;
 
   currentPage.value = Math.floor(selectedCategoryIndex / totalVisibleItems) + 1;
@@ -130,7 +126,7 @@ const updateItemsPerPage = () => {
   }
 };
 
-watch(value, () => {
+watch(selectedCategory, () => {
   updateItemsPerPage();
 });
 

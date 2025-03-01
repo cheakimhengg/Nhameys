@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
-import axios from 'axios';
 import type { FoodCategory, FoodItem } from '@/models/Menu';
 import useCart from './useCart';
+import { fetchFoodData } from './apiCalling';
 
 export const useMenu = () => {
   const foodData = ref<FoodCategory[]>([]);
@@ -10,21 +10,23 @@ export const useMenu = () => {
   const selectedItem = ref<FoodItem | null>(null);
   const allItems = ref<FoodItem[]>([]);
   const currentIndex = ref(0);
+  const isLoading = ref(false);
 
   const { addToCart } = useCart();
 
   const getFoodData = async () => {
     try {
-      const response = await axios.get(
-        'https://qr-menu-backend-hxlj.onrender.com/api/foods/by-category'
-      );
-      const apiData = response.data.foodData;
+      isLoading.value = true;
+      const response = await fetchFoodData();
+      const apiData = response.foodData;
       foodData.value = Array.isArray(apiData) ? apiData : [];
       return foodData.value;
     } catch (error) {
       console.error('Error fetching food data:', error);
       foodData.value = [];
       return foodData.value;
+    } finally {
+      isLoading.value = false;
     }
   };
 
@@ -88,5 +90,6 @@ export const useMenu = () => {
     handleAddToCart,
     updateSelectedItem,
     updateCurrentIndex,
+    isLoading,
   };
 };

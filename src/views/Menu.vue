@@ -1,16 +1,16 @@
 <template>
-  <section>
+  <section v-loading="isLoading">
+    <MenuNavbar v-if="!isLoading" />
     <div class="fixed max-w-[85rem] w-full lg:top-[4.568rem] top-[4.5rem] z-40 border-b">
       <Search v-model="searchQuery" />
     </div>
     <div class="fixed max-w-[85rem] w-full lg:top-[7.4063rem] top-[7.4rem] z-40 bg-white">
       <Category :filteredFoodData="filteredFoodData" />
     </div>
-    <div class="pt-36 md:pt-40">
-      <div v-if="!filteredFoodData.length" class="w-full flex justify-center items-center h-[60vh]">
+    <div class="pt-40">
+      <div v-if="!filteredFoodData.length" class="w-full flex justify-center items-center h-[80vh]">
         <el-empty :image-size="200" description="No data available" />
       </div>
-
       <div v-for="data in filteredFoodData" :key="data.id">
         <Heading :title="data.category" :data-category="data.category" />
         <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-2 my-2 2xl:mx-0 mx-1">
@@ -97,6 +97,7 @@
         </el-dialog>
       </div>
     </div>
+    <Footer v-if="!isLoading && filteredFoodData.length" />
   </section>
 </template>
 
@@ -110,6 +111,8 @@ import Category from '@/components/Category.vue';
 import Heading from '@/components/Heading.vue';
 import Card from '@/components/Card.vue';
 import ItemDialog from '@/components/ItemDialog.vue';
+import MenuNavbar from '@/components/MenuNavbar.vue';
+import Footer from '@/components/Footer.vue';
 
 const {
   getFoodData,
@@ -124,6 +127,7 @@ const {
   handleAddToCart,
   updateSelectedItem,
   updateCurrentIndex,
+  isLoading,
 } = useMenu();
 
 onMounted(() => {
