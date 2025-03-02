@@ -8,7 +8,7 @@
           <img :src="logo" alt="Nhamey Logo" class="h-[4.2rem] w-[4.2rem]" />
         </a>
         <div class="flex flex-col">
-          <span class="text-xl font-semiboldtracking-normal">Nhamey</span>
+          <span class="text-xl font-medium tracking-normal text-secondary">Nhamey</span>
           <el-tag effect="dark" round type="info">Closed</el-tag>
         </div>
       </div>
@@ -28,7 +28,7 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <el-button style="border: none; background-color: white" @click="handleCartClick">
+        <el-button style="border: none; background-color: white" @click="handleCartOpen()">
           <el-icon color="black" size="30"><ShoppingCart /></el-icon>
         </el-button>
         <CartDrawer v-model:drawer="drawer" :handleCartClose="handleCartClose" />
@@ -50,7 +50,7 @@
       </div>
 
       <div class="flex items-center text-[1.05rem] pr-4 select-none">
-        <el-button style="border: none; background-color: white" @click="handleCartClick">
+        <el-button style="border: none; background-color: white" @click="handleCartOpen()">
           <el-icon color="black" size="30"><ShoppingCart /></el-icon>
         </el-button>
         <CartDrawer v-model:drawer="drawer" :handleCartClose="handleCartClose" />
@@ -79,7 +79,7 @@ import logo from '@/assets/images/logo.png';
 
 const drawer = ref(false);
 
-const handleCartClick = () => {
+const handleCartOpen = () => {
   drawer.value = true;
 };
 

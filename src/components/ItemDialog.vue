@@ -1,15 +1,13 @@
 <template>
   <div class="flex flex-row justify-between w-full items-center">
-    <h2 class="flex-grow text-center -mr-[2.5rem] text-xl font-semibold">
+    <h2 class="flex-grow text-center -mr-[2.5rem] text-xl font-medium">
       {{ selectedItem.name }}
     </h2>
     <el-button type="info" size="large" @click="handleClose">
       <el-icon size="16"><CloseBold /></el-icon>
     </el-button>
   </div>
-
   <el-divider />
-
   <div class="relative flex items-center justify-center w-full">
     <el-button
       class="absolute sm:-left-[5rem] -left-[1rem]"
@@ -21,13 +19,11 @@
     >
       <el-icon color="white"> <ArrowLeftBold /> </el-icon>
     </el-button>
-
     <img
       :src="selectedItem.image"
       :alt="selectedItem.name"
       class="sm:min-h-[29rem] min-h-[23rem] w-[99%] object-scale-down rounded-md select-none"
     />
-
     <el-button
       class="absolute sm:-right-[5rem] -right-[1rem]"
       style="border: none; background-color: #bebebe"
@@ -41,26 +37,32 @@
       </el-icon>
     </el-button>
   </div>
-
   <el-divider />
 </template>
 
 <script lang="ts" setup>
+import type { FoodItem } from '@/models/Menu';
 import { CloseBold, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue';
 import { ref, watch } from 'vue';
 
-interface Item {
-  name: string;
-  image: string;
-  // Add other properties as needed
-}
-
-const props = defineProps<{
-  selectedItem: Item;
-  allItems: Item[];
-  currentIndex: number;
-  handleClose: () => void;
-}>();
+const props = defineProps({
+  selectedItem: {
+    type: Object as () => FoodItem,
+    required: true,
+  },
+  allItems: {
+    type: Array as () => FoodItem[],
+    required: true,
+  },
+  currentIndex: {
+    type: Number,
+    required: true,
+  },
+  handleClose: {
+    type: Function,
+    required: true,
+  },
+});
 
 const currentIndex = ref(props.currentIndex);
 const allItems = ref(props.allItems);
@@ -69,17 +71,10 @@ const selectedItem = ref(props.selectedItem);
 const emit = defineEmits(['updateSelectedItem', 'updateCurrentIndex']);
 
 watch(
-  () => props.selectedItem,
-  (newValue) => {
-    selectedItem.value = newValue;
-  },
-  { immediate: true }
-);
-
-watch(
-  () => props.currentIndex,
-  (newValue) => {
-    currentIndex.value = newValue;
+  [() => props.selectedItem, () => props.currentIndex],
+  ([newSelectedItem, newCurrentIndex]) => {
+    selectedItem.value = newSelectedItem;
+    currentIndex.value = newCurrentIndex;
   },
   { immediate: true }
 );

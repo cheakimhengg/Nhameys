@@ -27,6 +27,7 @@
       <!-- Dialog for Desktop -->
       <div class="hidden sm:block">
         <el-dialog
+          v-if="selectedItem"
           v-model="centerDialogVisible"
           width="500"
           align-center
@@ -34,7 +35,7 @@
           lock-scroll
           @close="handleClose"
         >
-          <div v-if="selectedItem" class="flex flex-col zoom-dialog">
+          <div class="flex flex-col zoom-dialog">
             <ItemDialog
               :selectedItem="selectedItem"
               :allItems="allItems"
@@ -46,7 +47,7 @@
           </div>
           <template #footer>
             <div class="flex justify-between items-center">
-              <h2 class="text-xl font-semibold">
+              <h2 class="text-xl font-medium">
                 $ {{ selectedItem ? selectedItem.price.toFixed(2) : '0.00' }}
               </h2>
               <el-button type="primary" size="large" @click="handleAddToCart(selectedItem)">
@@ -63,6 +64,7 @@
       <!-- Dialog for Mobile -->
       <div class="sm:hidden block">
         <el-dialog
+          v-if="selectedItem"
           v-model="centerDialogVisible"
           width="500"
           align-center
@@ -71,7 +73,7 @@
           @close="handleClose"
           style="margin-left: 10px; margin-right: 10px"
         >
-          <div v-if="selectedItem" class="flex flex-col zoom-dialog">
+          <div class="flex flex-col zoom-dialog">
             <ItemDialog
               :selectedItem="selectedItem"
               :allItems="allItems"
@@ -83,7 +85,7 @@
           </div>
           <template #footer>
             <div class="flex justify-between items-center">
-              <h2 class="text-xl font-semibold">
+              <h2 class="text-xl font-medium">
                 $ {{ selectedItem ? selectedItem.price.toFixed(2) : '0.00' }}
               </h2>
               <el-button type="primary" size="large" @click="handleAddToCart(selectedItem)">

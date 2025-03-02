@@ -1,16 +1,9 @@
+import type { CartItem } from '@/models/CartItem';
 import { ref } from 'vue';
 
-interface CartItem {
-  id: number;
-  name: string;
-  quantity: number;
-  image: string;
-  price: number;
-}
+const cart = ref<CartItem[]>([]);
 
 export default function useCart() {
-  const cart = ref<CartItem[]>([]);
-
   const addToCart = (item: Omit<CartItem, 'quantity'>) => {
     const existingItemIndex = cart.value.findIndex((cartItem) => cartItem.id === item.id);
 
@@ -21,7 +14,7 @@ export default function useCart() {
     }
   };
 
-  const removeFromCart = (itemId: number) => {
+  const removeFromCart = (itemId: string) => {
     const itemIndex = cart.value.findIndex((item) => item.id === itemId);
 
     if (itemIndex >= 0) {

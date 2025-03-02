@@ -7,7 +7,7 @@
     />
     <div class="flex flex-col border border-t-0 rounded-b-md p-1.5 gap-y-5">
       <span class="font-medium">{{ name }}</span>
-      <span class="text-end text-[#afafaf]">$ {{ price.toFixed(2) }}</span>
+      <span class="text-end text-secondary">$ {{ price.toFixed(2) }}</span>
     </div>
   </div>
 </template>

@@ -7,7 +7,7 @@
     @update:model-value="props.handleCartClose"
   >
     <div class="flex flex-row justify-between items-center w-full">
-      <h2 class="flex-grow text-center -mr-[2.5rem] lg:text-xl font-semibold">Your Orders</h2>
+      <h2 class="flex-grow text-center -mr-[2.5rem] lg:text-xl font-medium">Your Orders</h2>
       <div class="lg:flex hidden">
         <el-button type="info" size="large" @click="props.handleCartClose">
           <el-icon size="16">
@@ -23,7 +23,6 @@
         </el-button>
       </div>
     </div>
-
     <el-divider />
     <div v-if="cart.length > 0">
       <ul>
@@ -36,34 +35,34 @@
                 class="border rounded-md object-contain lg:h-[10.5rem] lg:w-[10.5rem] h-[6rem] w-[6rem]"
               />
               <div class="flex flex-col justify-between">
-                <h2 class="lg:text-lg font-semibold">
+                <h2 class="lg:text-lg font-medium">
                   {{ item.name }}
                 </h2>
                 <div class="lg:flex hidden">
                   <el-button type="info" style="padding: 15px" @click="removeFromCart(item.id)">
-                    <span class="font-bold text-2xl pb-1">-</span>
+                    <span class="font-medium text-2xl pb-1">-</span>
                   </el-button>
-                  <span class="flex justify-center items-center px-4 font-semibold">{{
+                  <span class="flex justify-center items-center px-4 font-medium">{{
                     item.quantity
                   }}</span>
                   <el-button type="info" style="padding: 14px" @click="addToCart(item)">
-                    <span class="font-bold text-xl pb-1">+</span>
+                    <span class="font-medium text-xl pb-1">+</span>
                   </el-button>
                 </div>
                 <div class="flex lg:hidden">
                   <el-button type="info" style="padding: 12px" @click="removeFromCart(item.id)">
-                    <span class="font-bold text-xl pb-1">-</span>
+                    <span class="font-medium text-xl pb-1">-</span>
                   </el-button>
-                  <span class="flex justify-center items-center px-3 font-semibold">{{
+                  <span class="flex justify-center items-center px-3 font-medium">{{
                     item.quantity
                   }}</span>
                   <el-button type="info" style="padding: 10px" @click="addToCart(item)">
-                    <span class="font-bold text-xl pb-1">+</span>
+                    <span class="font-medium text-xl pb-1">+</span>
                   </el-button>
                 </div>
               </div>
             </div>
-            <h2 class="lg:text-lg font-semibold">$ {{ item.price.toFixed(2) }}</h2>
+            <h2 class="lg:text-lg font-medium">$ {{ item.price.toFixed(2) }}</h2>
           </div>
           <el-divider />
         </li>
@@ -73,7 +72,7 @@
       <el-empty :image-size="200" description="Cart is empty" />
     </div>
     <div v-if="cart.length > 0" class="flex flex-col lg:gap-4 gap-2">
-      <div class="flex justify-end lg:gap-32 gap-20 lg:text-xl font-semibold">
+      <div class="flex justify-end lg:gap-32 gap-20 lg:text-xl font-medium">
         <h2>Grand Total:</h2>
         <h2>$ {{ cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2) }}</h2>
       </div>
@@ -112,6 +111,7 @@ const props = defineProps({
 });
 
 const { cart, removeFromCart, addToCart, clearCart } = useCart();
+
 const windowWidth = ref<number | null>(null);
 
 const updateWindowWidth = () => {
