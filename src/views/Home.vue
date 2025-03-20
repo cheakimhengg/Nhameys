@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-[85rem] w-full flex flex-row items-center">
     <div class="z-10">
-      <h1 class="text-5xl font-bold leading-tight text-gray-900">
+      <!-- <h1 class="text-5xl font-bold leading-tight text-gray-900">
         Effortlessly Track and Manage Student Attendance
       </h1>
       <ul class="mt-5 text-lg text-gray-600 space-y-2">
@@ -14,7 +14,7 @@
         <li class="flex items-center">
           <span class="mr-2 text-purple-500">✔</span> Effortless Integration and Accessibility
         </li>
-      </ul>
+      </ul> -->
       <el-button
         type="primary"
         size="large"
@@ -22,15 +22,6 @@
       >
         Get Started
       </el-button>
-    </div>
-
-    <!-- Right Section (Image) -->
-    <div class="absolute right-10 bottom-0 w-[50%]">
-      <img
-        src="@/assets/images/logo.png"
-        alt="Attendance Management Interface"
-        class="w-full h-auto drop-shadow-xl"
-      />
     </div>
   </div>
 </template>
