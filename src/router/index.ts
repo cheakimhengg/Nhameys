@@ -1,10 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/Home.vue';
-import MenuView from '@/views/Menu.vue';
-import NotFound from '@/views/NotFound.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -14,12 +12,12 @@ const router = createRouter({
     {
       path: '/:restaurant/:id',
       name: 'menu',
-      component: MenuView,
+      component: () => import('@/views/Menu.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
-      component: NotFound,
+      component: () => import('@/views/NotFound.vue'),
     },
   ],
 });
