@@ -19,5 +19,5 @@ export const fetchData = async (endpoint: string, params: object) => {
 };
 
 export const fetchFoodData = async (params: object) => {
-  return await fetchData('/foods/by-category', params);
+  return await fetchData('/foods/by-webid', params);
 };
