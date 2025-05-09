@@ -17,7 +17,7 @@ export const useMenu = () => {
   const getFoodData = async () => {
     try {
       isLoading.value = true;
-      const response = await fetchFoodData();
+      const response = await fetchFoodData({ webId: 1 });
       const apiData = response.foodData;
       foodData.value = Array.isArray(apiData) ? apiData : [];
       return foodData.value;
