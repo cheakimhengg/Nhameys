@@ -18,7 +18,9 @@ export const useMenu = () => {
     try {
       isLoading.value = true;
       const response = await fetchAllUsers();
-      const user = response.users.find((u) => u.username === username);
+      const user = response.users.find(
+        (u: { username: string; webID: string }) => u.username === username
+      );
       if (user) {
         const response = await fetchFoodData({ webId: user.webID });
         const apiData = response.foodData;
