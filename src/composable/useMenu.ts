@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 import type { FoodCategory, FoodItem } from '@/models/Menu';
 import useCart from './useCart';
-import { fetchFoodData } from './apiCalling';
+import { fetchFoodData, fetchAllUsers } from './apiCalling';
 
 export const useMenu = () => {
   const foodData = ref<FoodCategory[]>([]);
@@ -14,15 +14,21 @@ export const useMenu = () => {
 
   const { addToCart } = useCart();
 
-  const getFoodData = async () => {
+  const getFoodByWebId = async (username: string) => {
     try {
       isLoading.value = true;
-      const response = await fetchFoodData({ webId: 1 });
-      const apiData = response.foodData;
-      foodData.value = Array.isArray(apiData) ? apiData : [];
+      const response = await fetchAllUsers();
+      const user = response.users.find((u) => u.username === username);
+      if (user) {
+        const response = await fetchFoodData({ webId: user.webID });
+        const apiData = response.foodData;
+        foodData.value = Array.isArray(apiData) ? apiData : [];
+      } else {
+        foodData.value = [];
+      }
       return foodData.value;
     } catch (error) {
-      console.error('Error fetching food data:', error);
+      console.error('Error fetching food data by username:', error);
       foodData.value = [];
       return foodData.value;
     } finally {
@@ -78,7 +84,7 @@ export const useMenu = () => {
   };
 
   return {
-    getFoodData,
+    getFoodByWebId,
     filteredFoodData,
     searchQuery,
     centerDialogVisible,

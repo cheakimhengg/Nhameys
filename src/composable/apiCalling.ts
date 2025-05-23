@@ -21,3 +21,7 @@ export const fetchData = async (endpoint: string, params: object) => {
 export const fetchFoodData = async (params: object) => {
   return await fetchData('/foods/by-webid', params);
 };
+
+export const fetchAllUsers = async () => {
+  return await fetchData('auth/users', {});
+};

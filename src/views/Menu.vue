@@ -14,36 +14,18 @@
       <div v-for="data in filteredFoodData" :key="data.id">
         <Heading :title="data.category" :data-category="data.category" />
         <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-2 my-2 2xl:mx-0 mx-1">
-          <Card
-            v-for="item in data.items"
-            :key="item.name"
-            :name="item.name"
-            :price="item.price"
-            :image="item.image"
-            @click="openDialog(item)"
-          />
+          <Card v-for="item in data.items" :key="item.name" :name="item.name" :price="item.price" :image="item.image"
+            @click="openDialog(item)" />
         </div>
       </div>
       <!-- Dialog for Desktop -->
       <div class="hidden sm:block">
-        <el-dialog
-          v-if="selectedItem"
-          v-model="centerDialogVisible"
-          width="500"
-          align-center
-          close-icon="none"
-          lock-scroll
-          @close="handleClose"
-        >
+        <el-dialog v-if="selectedItem" v-model="centerDialogVisible" width="500" align-center close-icon="none"
+          lock-scroll @close="handleClose">
           <div class="flex flex-col zoom-dialog">
-            <ItemDialog
-              :selectedItem="selectedItem"
-              :allItems="allItems"
-              :currentIndex="currentIndex"
-              :handleClose="handleClose"
-              @updateSelectedItem="updateSelectedItem"
-              @updateCurrentIndex="updateCurrentIndex"
-            />
+            <ItemDialog :selectedItem="selectedItem" :allItems="allItems" :currentIndex="currentIndex"
+              :handleClose="handleClose" @updateSelectedItem="updateSelectedItem"
+              @updateCurrentIndex="updateCurrentIndex" />
           </div>
           <template #footer>
             <div class="flex justify-between items-center">
@@ -63,25 +45,12 @@
 
       <!-- Dialog for Mobile -->
       <div class="sm:hidden block">
-        <el-dialog
-          v-if="selectedItem"
-          v-model="centerDialogVisible"
-          width="500"
-          align-center
-          close-icon="none"
-          lock-scroll
-          @close="handleClose"
-          style="margin-left: 10px; margin-right: 10px"
-        >
+        <el-dialog v-if="selectedItem" v-model="centerDialogVisible" width="500" align-center close-icon="none"
+          lock-scroll @close="handleClose" style="margin-left: 10px; margin-right: 10px">
           <div class="flex flex-col zoom-dialog">
-            <ItemDialog
-              :selectedItem="selectedItem"
-              :allItems="allItems"
-              :currentIndex="currentIndex"
-              :handleClose="handleClose"
-              @updateSelectedItem="updateSelectedItem"
-              @updateCurrentIndex="updateCurrentIndex"
-            />
+            <ItemDialog :selectedItem="selectedItem" :allItems="allItems" :currentIndex="currentIndex"
+              :handleClose="handleClose" @updateSelectedItem="updateSelectedItem"
+              @updateCurrentIndex="updateCurrentIndex" />
           </div>
           <template #footer>
             <div class="flex justify-between items-center">
@@ -106,7 +75,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { ShoppingCart } from '@element-plus/icons-vue';
-
+import { useRoute } from 'vue-router';
 import { useMenu } from '@/composable/useMenu';
 import Search from '@/components/Search.vue';
 import Category from '@/components/Category.vue';
@@ -117,7 +86,6 @@ import MenuNavbar from '@/components/MenuNavbar.vue';
 import Footer from '@/components/Footer.vue';
 
 const {
-  getFoodData,
   filteredFoodData,
   searchQuery,
   centerDialogVisible,
@@ -130,10 +98,14 @@ const {
   updateSelectedItem,
   updateCurrentIndex,
   isLoading,
+  getFoodByWebId,
 } = useMenu();
 
-onMounted(() => {
-  getFoodData();
+const route = useRoute();
+
+onMounted(async () => {
+  const username = route.params.restaurant as string;
+  await getFoodByWebId(username);
 });
 </script>
 
