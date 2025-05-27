@@ -29,5 +29,7 @@
   "english": "English",
   "khmer": "Khmer",
   "noDescription": "No description available.",
-  "searchPlaceholder": "Search by name or category"
+  "searchPlaceholder": "Search by name or category",
+  "orderFailed": "Order failed. Please try again.",
+  "error": "Error"
 }

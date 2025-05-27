@@ -24,8 +24,9 @@
         <li v-for="item in cart" :key="item.id">
           <div class="flex justify-between">
             <div class="flex lg:gap-4 gap-2.5 lg:w-[85%] w-[80%]">
-              <img :src="item.image" :alt="item.name"
-                class="border rounded-md object-contain lg:h-[10.5rem] lg:w-[10.5rem] h-[6rem] w-[6rem]" />
+              <div class="aspect-[4/4] w-[6rem] overflow-hidden rounded-t-md bg-gray-100">
+                <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
+              </div>
               <div class="flex flex-col justify-between">
                 <h2 class="lg:text-lg font-medium">
                   {{ item.name }}
@@ -36,7 +37,7 @@
                   </el-button>
                   <span class="flex justify-center items-center px-4 font-medium">{{
                     item.quantity
-                    }}</span>
+                  }}</span>
                   <el-button type="info" style="padding: 14px" @click="addToCart(item)">
                     <span class="font-medium text-xl pb-1">+</span>
                   </el-button>
@@ -47,7 +48,7 @@
                   </el-button>
                   <span class="flex justify-center items-center px-3 font-medium">{{
                     item.quantity
-                    }}</span>
+                  }}</span>
                   <el-button type="info" style="padding: 10px" @click="addToCart(item)">
                     <span class="font-medium text-xl pb-1">+</span>
                   </el-button>
@@ -70,12 +71,12 @@
       </div>
       <div class="flex justify-end">
         <div class="lg:flex hidden">
-          <el-button type="info" size="large" @click="handleOrder">
+          <el-button type="info" size="large" @click="orderNow">
             <h2 class="text-lg">{{ t('orderNow') }}</h2>
           </el-button>
         </div>
         <div class="flex lg:hidden">
-          <el-button type="info" @click="handleOrder">
+          <el-button type="info" @click="orderNow">
             <h2>{{ t('orderNow') }}</h2>
           </el-button>
         </div>
@@ -91,6 +92,9 @@ import useCart from '@/composable/useCart';
 import { defineProps } from 'vue';
 import { ElNotification } from 'element-plus';
 import { useI18n } from 'vue-i18n';
+import useOrder from '@/composable/useOrder';
+import { useRoute } from 'vue-router';
+import type { CartItem } from '@/models/CartItem';
 
 const { t } = useI18n();
 
@@ -106,6 +110,8 @@ const props = defineProps({
 });
 
 const { cart, removeFromCart, addToCart, clearCart } = useCart();
+const { placeOrder } = useOrder();
+const route = useRoute();
 
 const windowWidth = ref<number | null>(null);
 
@@ -118,15 +124,6 @@ const drawerSize = computed(() => {
   return windowWidth.value <= 1024 ? '80%' : '40%';
 });
 
-const handleOrder = () => {
-  props.handleCartClose();
-  ElNotification.success({
-    title: t('success'),
-    message: t('orderSuccess'),
-  });
-  clearCart();
-};
-
 onMounted(() => {
   updateWindowWidth();
   window.addEventListener('resize', updateWindowWidth);
@@ -135,6 +132,21 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateWindowWidth);
 });
+
+const orderNow = async () => {
+  const webID = window.localStorage.getItem('webID') || '';
+  const tableId = route.params.id as string;
+  const items = cart.value.map((item: CartItem) => ({ foodId: item.id, quantity: item.quantity }));
+  const response = await placeOrder(webID, tableId, items);
+  props.handleCartClose();
+  clearCart();
+  if (response?.statusCode === 200) {
+    ElNotification.success({ title: t('success'), message: t('orderSuccess') });
+
+  } else {
+    ElNotification.error({ title: t('error'), message: t('orderFailed') });
+  }
+};
 </script>
 
 <style scoped>

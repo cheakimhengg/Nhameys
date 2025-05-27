@@ -25,3 +25,7 @@ export const fetchFoodData = async (params: object) => {
 export const fetchAllUsers = async () => {
   return await fetchData('auth/users', {});
 };
+
+export const postOrder = async (order: object) => {
+  return await fetchData('/order', order);
+};
