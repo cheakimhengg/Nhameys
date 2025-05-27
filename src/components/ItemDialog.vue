@@ -4,38 +4,30 @@
       {{ selectedItem.name }}
     </h2>
     <el-button type="info" size="large" @click="handleClose">
-      <el-icon size="16"><CloseBold /></el-icon>
+      <el-icon size="16">
+        <CloseBold />
+      </el-icon>
     </el-button>
   </div>
   <el-divider />
   <div class="relative flex items-center justify-center w-full">
-    <el-button
-      class="absolute sm:-left-[5rem] -left-[1rem]"
-      style="border: none; background-color: #bebebe"
-      round
-      size="large"
-      @click="prevItem"
-      :disabled="currentIndex === 0"
-    >
-      <el-icon color="white"> <ArrowLeftBold /> </el-icon>
+    <el-button class="absolute sm:-left-[5rem] -left-[1rem]" style="border: none; background-color: #bebebe" round
+      size="large" @click="prevItem" :disabled="currentIndex === 0">
+      <el-icon color="white">
+        <ArrowLeftBold />
+      </el-icon>
     </el-button>
-    <img
-      :src="selectedItem.image"
-      :alt="selectedItem.name"
-      class="sm:min-h-[29rem] min-h-[23rem] w-[99%] object-scale-down rounded-md select-none"
-    />
-    <el-button
-      class="absolute sm:-right-[5rem] -right-[1rem]"
-      style="border: none; background-color: #bebebe"
-      round
-      size="large"
-      @click="nextItem"
-      :disabled="currentIndex === allItems.length - 1"
-    >
+    <img :src="selectedItem.image" :alt="selectedItem.name"
+      class="sm:min-h-[29rem] min-h-[23rem] w-[99%] object-scale-down rounded-md select-none" />
+    <el-button class="absolute sm:-right-[5rem] -right-[1rem]" style="border: none; background-color: #bebebe" round
+      size="large" @click="nextItem" :disabled="currentIndex === allItems.length - 1">
       <el-icon color="white">
         <ArrowRightBold />
       </el-icon>
     </el-button>
+  </div>
+  <div class="description-text">
+    {{ selectedItem.description || 'No description available.' }}
   </div>
   <el-divider />
 </template>
@@ -107,5 +99,31 @@ const prevItem = () => {
   font-size: 16px;
   padding-right: 14px;
   padding-left: 14px;
+}
+
+.description-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+  padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+  margin-bottom: 1.25rem;
+  max-width: 38rem;
+  width: 100%;
+  text-align: left;
+}
+
+.description-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.description-text {
+  font-size: 1.05rem;
+  color: #6b7280;
+  line-height: 1.6;
 }
 </style>

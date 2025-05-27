@@ -3,6 +3,8 @@ export interface FoodItem {
   name: string;
   price: number;
   image: string;
+  description?: string;
+  status?: boolean;
 }
 
 export interface FoodCategory {
