@@ -9,7 +9,7 @@
     </div>
     <div class="pt-40">
       <div v-if="!filteredFoodData.length" class="w-full flex justify-center items-center h-[80vh]">
-        <el-empty :image-size="200" description="No data available" />
+        <el-empty :image-size="200" :description="t('noData')" />
       </div>
       <div v-for="data in filteredFoodData" :key="data.id">
         <Heading :title="data.category" :data-category="data.category" />
@@ -36,7 +36,7 @@
                 <el-icon size="24" class="mr-1.5">
                   <ShoppingCart />
                 </el-icon>
-                Add
+                {{ t('add') }}
               </el-button>
             </div>
           </template>
@@ -61,7 +61,7 @@
                 <el-icon size="24" class="mr-1.5">
                   <ShoppingCart />
                 </el-icon>
-                Add
+                {{ t('add') }}
               </el-button>
             </div>
           </template>
@@ -84,6 +84,9 @@ import Card from '@/components/Card.vue';
 import ItemDialog from '@/components/ItemDialog.vue';
 import MenuNavbar from '@/components/MenuNavbar.vue';
 import Footer from '@/components/Footer.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const {
   filteredFoodData,

@@ -1,13 +1,8 @@
 <template>
-  <el-drawer
-    :model-value="props.drawer"
-    :with-header="false"
-    :size="drawerSize"
-    lock-scroll
-    @update:model-value="props.handleCartClose"
-  >
+  <el-drawer :model-value="props.drawer" :with-header="false" :size="drawerSize" lock-scroll
+    @update:model-value="props.handleCartClose">
     <div class="flex flex-row justify-between items-center w-full">
-      <h2 class="flex-grow text-center -mr-[2.5rem] lg:text-xl font-medium">Your Orders</h2>
+      <h2 class="flex-grow text-center -mr-[2.5rem] lg:text-xl font-medium">{{ t('yourOrders') }}</h2>
       <div class="lg:flex hidden">
         <el-button type="info" size="large" @click="props.handleCartClose">
           <el-icon size="16">
@@ -29,11 +24,8 @@
         <li v-for="item in cart" :key="item.id">
           <div class="flex justify-between">
             <div class="flex lg:gap-4 gap-2.5 lg:w-[85%] w-[80%]">
-              <img
-                :src="item.image"
-                :alt="item.name"
-                class="border rounded-md object-contain lg:h-[10.5rem] lg:w-[10.5rem] h-[6rem] w-[6rem]"
-              />
+              <img :src="item.image" :alt="item.name"
+                class="border rounded-md object-contain lg:h-[10.5rem] lg:w-[10.5rem] h-[6rem] w-[6rem]" />
               <div class="flex flex-col justify-between">
                 <h2 class="lg:text-lg font-medium">
                   {{ item.name }}
@@ -44,7 +36,7 @@
                   </el-button>
                   <span class="flex justify-center items-center px-4 font-medium">{{
                     item.quantity
-                  }}</span>
+                    }}</span>
                   <el-button type="info" style="padding: 14px" @click="addToCart(item)">
                     <span class="font-medium text-xl pb-1">+</span>
                   </el-button>
@@ -55,7 +47,7 @@
                   </el-button>
                   <span class="flex justify-center items-center px-3 font-medium">{{
                     item.quantity
-                  }}</span>
+                    }}</span>
                   <el-button type="info" style="padding: 10px" @click="addToCart(item)">
                     <span class="font-medium text-xl pb-1">+</span>
                   </el-button>
@@ -69,22 +61,22 @@
       </ul>
     </div>
     <div v-else class="w-full flex justify-center items-center h-[60vh]">
-      <el-empty :image-size="200" description="Cart is empty" />
+      <el-empty :image-size="200" :description="t('cartEmpty')" />
     </div>
     <div v-if="cart.length > 0" class="flex flex-col lg:gap-4 gap-2">
       <div class="flex justify-end lg:gap-32 gap-20 lg:text-xl font-medium">
-        <h2>Grand Total:</h2>
-        <h2>$ {{ cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2) }}</h2>
+        <h2>{{ t('grandTotal') }}:</h2>
+        <h2>$ {{cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}}</h2>
       </div>
       <div class="flex justify-end">
         <div class="lg:flex hidden">
           <el-button type="info" size="large" @click="handleOrder">
-            <h2 class="text-lg">Order Now</h2>
+            <h2 class="text-lg">{{ t('orderNow') }}</h2>
           </el-button>
         </div>
         <div class="flex lg:hidden">
           <el-button type="info" @click="handleOrder">
-            <h2>Order Now</h2>
+            <h2>{{ t('orderNow') }}</h2>
           </el-button>
         </div>
       </div>
@@ -98,6 +90,9 @@ import { CloseBold } from '@element-plus/icons-vue';
 import useCart from '@/composable/useCart';
 import { defineProps } from 'vue';
 import { ElNotification } from 'element-plus';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   drawer: {
@@ -126,8 +121,8 @@ const drawerSize = computed(() => {
 const handleOrder = () => {
   props.handleCartClose();
   ElNotification.success({
-    title: 'Success',
-    message: 'Order successfully!',
+    title: t('success'),
+    message: t('orderSuccess'),
   });
   clearCart();
 };

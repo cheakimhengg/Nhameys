@@ -1,23 +1,15 @@
 <template>
-  <el-input
-    v-model="input"
-    size="large"
-    style="font-size: 1rem; height: 45px"
-    placeholder="Search by name or category"
-  >
+  <el-input v-model="input" size="large" style="font-size: 1rem; height: 45px" :placeholder="t('searchPlaceholder')">
     <template #prefix>
-      <el-icon size="20" color="black"><Search /></el-icon>
+      <el-icon size="20" color="black">
+        <Search />
+      </el-icon>
     </template>
 
     <template #suffix>
-      <el-icon
-        v-if="input"
-        size="20"
-        color="black"
-        @click="clearInput"
-        class="cursor-pointer mr-2.5"
-        ><CircleClose
-      /></el-icon>
+      <el-icon v-if="input" size="20" color="black" @click="clearInput" class="cursor-pointer mr-2.5">
+        <CircleClose />
+      </el-icon>
     </template>
   </el-input>
 </template>
@@ -25,6 +17,7 @@
 <script lang="ts" setup>
 import { Search, CircleClose } from '@element-plus/icons-vue';
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
   modelValue: String,
@@ -32,6 +25,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const input = ref(props.modelValue);
+
+const { t } = useI18n();
 
 const clearInput = () => {
   input.value = '';

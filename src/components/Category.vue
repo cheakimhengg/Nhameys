@@ -1,28 +1,15 @@
 <template>
   <div class="custom-style w-full select-none flex flex-row items-center">
-    <el-button
-      style="border: none; background-color: white"
-      @click="prevPage"
-      :disabled="currentPage === 1"
-    >
+    <el-button style="border: none; background-color: white" @click="prevPage" :disabled="currentPage === 1">
       <el-icon size="20">
         <ArrowLeftBold />
       </el-icon>
     </el-button>
 
-    <el-segmented
-      v-model="selectedCategory"
-      @change="navigateToCategory"
-      :options="paginatedCategories"
-      block
-      class="flex-grow"
-    />
+    <el-segmented v-model="selectedCategory" @change="navigateToCategory" :options="paginatedCategories" block
+      class="flex-grow" />
 
-    <el-button
-      @click="nextPage"
-      style="border: none; background-color: white"
-      :disabled="currentPage === totalPages"
-    >
+    <el-button @click="nextPage" style="border: none; background-color: white" :disabled="currentPage === totalPages">
       <el-icon size="20">
         <ArrowRightBold />
       </el-icon>
@@ -35,6 +22,9 @@ import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue';
 import type { FoodCategory } from '@/models/Menu';
 import { debounce } from '@/composable/commonHelper';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   filteredFoodData: {

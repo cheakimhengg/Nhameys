@@ -29,7 +29,7 @@
     </el-button>
   </div>
   <div class="description-text">
-    {{ selectedItem.description || 'No description available.' }}
+    {{ selectedItem.description || t('noDescription') }}
   </div>
   <el-divider />
 </template>
@@ -38,6 +38,9 @@
 import type { FoodItem } from '@/models/Menu';
 import { CloseBold, ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue';
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedItem: {
