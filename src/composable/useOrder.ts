@@ -6,17 +6,12 @@ export default function useOrder() {
   const orderError = ref<string | null>(null);
   const orderSuccess = ref(false);
 
-  const placeOrder = async (
-    webID: string,
-    tableId: string,
-    items: { foodId: string; quantity: number }[]
-  ) => {
+  const placeOrder = async (tableId: string, items: { foodId: string; quantity: number }[]) => {
     isOrdering.value = true;
     orderError.value = null;
     orderSuccess.value = false;
     try {
       const payload = {
-        webID,
         tableId,
         items,
       };
