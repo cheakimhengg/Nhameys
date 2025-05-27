@@ -17,8 +17,10 @@
         <ArrowLeftBold />
       </el-icon>
     </el-button>
-    <img :src="selectedItem.image" :alt="selectedItem.name"
-      class="sm:min-h-[29rem] min-h-[23rem] w-[99%] object-scale-down rounded-md select-none" />
+    <div class="flex justify-center items-center w-full py-4">
+      <img :src="selectedItem.image" :alt="selectedItem.name"
+        class="w-full max-w-[500px] max-h-[400px] object-contain mb-2" />
+    </div>
     <el-button class="absolute sm:-right-[5rem] -right-[1rem]" style="border: none; background-color: #bebebe" round
       size="large" @click="nextItem" :disabled="currentIndex === allItems.length - 1">
       <el-icon color="white">
