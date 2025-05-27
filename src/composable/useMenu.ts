@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 import type { FoodCategory, FoodItem } from '@/models/Menu';
 import useCart from './useCart';
-import { fetchFoodData, fetchAllUsers } from './apiCalling';
+import { fetchFoodData } from './apiCalling';
 
 export const useMenu = () => {
   const foodData = ref<FoodCategory[]>([]);
@@ -17,17 +17,9 @@ export const useMenu = () => {
   const getFoodByWebId = async (username: string) => {
     try {
       isLoading.value = true;
-      const response = await fetchAllUsers();
-      const user = response.users.find(
-        (u: { username: string; webID: string }) => u.username === username
-      );
-      if (user) {
-        const response = await fetchFoodData({ webId: user.webID });
-        const apiData = response.foodData;
-        foodData.value = Array.isArray(apiData) ? apiData : [];
-      } else {
-        foodData.value = [];
-      }
+      const response = await fetchFoodData({ username });
+      const apiData = response.foodData;
+      foodData.value = Array.isArray(apiData) ? apiData : [];
       return foodData.value;
     } catch (error) {
       console.error('Error fetching food data by username:', error);
