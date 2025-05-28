@@ -22,13 +22,13 @@
     <div v-if="cart.length > 0">
       <ul>
         <li v-for="item in cart" :key="item.id">
-          <div class="flex justify-between">
-            <div class="flex lg:gap-4 gap-2.5 lg:w-[85%] w-[80%]">
+          <div class="flex justify-between  text-secondary">
+            <div class="flex lg:gap-4 gap-2.5 lg:w-[85%] w-[80%] ">
               <div class="aspect-[4/4] w-[6rem] overflow-hidden rounded-t-md bg-gray-100">
                 <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
               </div>
-              <div class="flex flex-col justify-between">
-                <h2 class="lg:text-lg font-medium">
+              <div class="flex flex-col justify-between min-w-0 flex-grow">
+                <h2 class="lg:text-lg font-medium truncate">
                   {{ item.name }}
                 </h2>
                 <div class="lg:flex hidden">
@@ -64,19 +64,19 @@
     <div v-else class="w-full flex justify-center items-center h-[60vh]">
       <el-empty :image-size="200" :description="t('cartEmpty')" />
     </div>
-    <div v-if="cart.length > 0" class="flex flex-col lg:gap-4 gap-2">
-      <div class="flex justify-end lg:gap-32 gap-20 lg:text-xl font-medium">
+    <div v-if="cart.length > 0" class="flex flex-col lg:gap-4 gap-2 pt-2">
+      <div class="flex justify-end lg:gap-32 gap-20 lg:text-xl font-medium text-secondary">
         <h2>{{ t('grandTotal') }}:</h2>
         <h2>$ {{cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}}</h2>
       </div>
       <div class="flex justify-end">
         <div class="lg:flex hidden">
-          <el-button type="info" size="large" @click="orderNow">
+          <el-button type="primary" size="large" @click="orderNow">
             <h2 class="text-lg">{{ t('orderNow') }}</h2>
           </el-button>
         </div>
         <div class="flex lg:hidden">
-          <el-button type="info" @click="orderNow">
+          <el-button type="primary" @click="orderNow">
             <h2>{{ t('orderNow') }}</h2>
           </el-button>
         </div>
