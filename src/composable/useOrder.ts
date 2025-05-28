@@ -1,12 +1,35 @@
 import { ref } from 'vue';
-import { postOrder } from './apiCalling';
+import { postOrder, fetchData } from './apiCalling';
+
+export type OrderHistoryItem = {
+  id: string;
+  createdAt: string;
+  status: string;
+  items: { foodId: string; name: string; quantity: number }[];
+};
+
+export const getOrdersForTable = async (
+  tableId: string,
+  username: string
+): Promise<OrderHistoryItem[]> => {
+  try {
+    const response = await fetchData('/order/history', { tableId, username });
+    return response.orders || [];
+  } catch (error) {
+    return [];
+  }
+};
 
 export default function useOrder() {
   const isOrdering = ref(false);
   const orderError = ref<string | null>(null);
   const orderSuccess = ref(false);
 
-  const placeOrder = async (tableId: string, items: { foodId: string; quantity: number }[]) => {
+  const placeOrder = async (
+    tableId: string,
+    items: { foodId: string; quantity: number }[],
+    username: string
+  ) => {
     isOrdering.value = true;
     orderError.value = null;
     orderSuccess.value = false;
@@ -14,6 +37,7 @@ export default function useOrder() {
       const payload = {
         tableId,
         items,
+        username,
       };
       const response = await postOrder(payload);
       if (response && response.statusCode === 200) {

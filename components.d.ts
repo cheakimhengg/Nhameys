@@ -35,6 +35,7 @@ declare module 'vue' {
     ItemDialog: typeof import('./src/components/ItemDialog.vue')['default']
     MenuNavbar: typeof import('./src/components/MenuNavbar.vue')['default']
     Navbar: typeof import('./src/components/Navbar.vue')['default']
+    OrderHistoryDialog: typeof import('./src/components/OrderHistoryDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./src/components/Search.vue')['default']

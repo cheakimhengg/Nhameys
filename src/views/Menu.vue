@@ -28,7 +28,7 @@
               @updateCurrentIndex="updateCurrentIndex" />
           </div>
           <template #footer>
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center text-secondary">
               <h2 class="text-xl font-medium">
                 $ {{ selectedItem ? selectedItem.price.toFixed(2) : '0.00' }}
               </h2>
@@ -53,7 +53,7 @@
               @updateCurrentIndex="updateCurrentIndex" />
           </div>
           <template #footer>
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center text-secondary">
               <h2 class="text-xl font-medium">
                 $ {{ selectedItem ? selectedItem.price.toFixed(2) : '0.00' }}
               </h2>

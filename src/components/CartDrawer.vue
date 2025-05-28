@@ -71,12 +71,12 @@
       </div>
       <div class="flex justify-end">
         <div class="lg:flex hidden">
-          <el-button type="primary" size="large" @click="orderNow">
+          <el-button type="primary" size="large" @click="orderNow" :loading="isOrdering" :disabled="isOrdering">
             <h2 class="text-lg">{{ t('orderNow') }}</h2>
           </el-button>
         </div>
         <div class="flex lg:hidden">
-          <el-button type="primary" @click="orderNow">
+          <el-button type="primary" @click="orderNow" :loading="isOrdering" :disabled="isOrdering">
             <h2>{{ t('orderNow') }}</h2>
           </el-button>
         </div>
@@ -90,7 +90,7 @@ import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { CloseBold } from '@element-plus/icons-vue';
 import useCart from '@/composable/useCart';
 import { defineProps } from 'vue';
-import { ElNotification } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import useOrder from '@/composable/useOrder';
 import { useRoute } from 'vue-router';
@@ -114,6 +114,7 @@ const { placeOrder } = useOrder();
 const route = useRoute();
 
 const windowWidth = ref<number | null>(null);
+const isOrdering = ref(false);
 
 const updateWindowWidth = () => {
   windowWidth.value = window.innerWidth;
@@ -134,17 +135,24 @@ onBeforeUnmount(() => {
 });
 
 const orderNow = async () => {
-  const webID = window.localStorage.getItem('webID') || '';
-  const tableId = route.params.id as string;
-  const items = cart.value.map((item: CartItem) => ({ foodId: item.id, quantity: item.quantity }));
-  const response = await placeOrder(webID, tableId, items);
-  props.handleCartClose();
-  clearCart();
-  if (response?.statusCode === 200) {
-    ElNotification.success({ title: t('success'), message: t('orderSuccess') });
-
-  } else {
-    ElNotification.error({ title: t('error'), message: t('orderFailed') });
+  if (isOrdering.value) return;
+  isOrdering.value = true;
+  try {
+    const username = route.params.restaurant as string;
+    const tableId = route.params.id as string;
+    const items = cart.value.map((item: CartItem) => ({ foodId: item.id, quantity: item.quantity }));
+    const response = await placeOrder(tableId, items, username);
+    props.handleCartClose();
+    clearCart();
+    if (response?.statusCode === 200) {
+      ElMessage.success({ message: t('orderSuccess') });
+    } else {
+      ElMessage.error({ message: t('orderFailed') });
+    }
+  } catch {
+    ElMessage.error({ message: t('orderFailed') });
+  } finally {
+    isOrdering.value = false;
   }
 };
 </script>

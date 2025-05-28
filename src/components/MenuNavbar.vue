@@ -35,6 +35,7 @@
               <el-dropdown-item>{{ t('action1') }}</el-dropdown-item>
               <el-dropdown-item disabled>{{ t('action2') }}</el-dropdown-item>
               <el-dropdown-item divided>{{ t('action5') }}</el-dropdown-item>
+              <el-dropdown-item @click="openOrderHistoryDialog">View Orders</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -44,6 +45,8 @@
           </el-icon>
         </el-button>
         <CartDrawer v-model:drawer="drawer" :handleCartClose="handleCartClose" />
+        <OrderHistoryDialog :visible="orderHistoryDialogVisible" :onClose="closeOrderHistoryDialog"
+          :tableId="route.params.id as string" :username="route.params.restaurant as string" />
       </div>
     </div>
 
@@ -86,10 +89,12 @@
             <el-dropdown-menu>
               <el-dropdown-item>{{ t('action1') }}</el-dropdown-item>
               <el-dropdown-item disabled>{{ t('action2') }}</el-dropdown-item>
-              <el-dropdown-item divided>{{ t('action5') }}</el-dropdown-item>
+              <el-dropdown-item @click="openOrderHistoryDialog">View Orders</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+        <OrderHistoryDialog :visible="orderHistoryDialogVisible" :onClose="closeOrderHistoryDialog"
+          :tableId="route.params.id as string" :username="route.params.restaurant as string" />
       </div>
     </div>
   </section>
@@ -104,9 +109,13 @@ import logo from '@/assets/images/logo.png';
 import { useI18n } from 'vue-i18n';
 import enFlag from '@/assets/images/en.png';
 import kmFlag from '@/assets/images/km.png';
+import OrderHistoryDialog from '@/components/OrderHistoryDialog.vue';
+import { useRoute } from 'vue-router';
 
 const drawer = ref(false);
+const orderHistoryDialogVisible = ref(false);
 const { locale, t } = useI18n();
+const route = useRoute();
 
 const langMap = {
   en: { name: 'English', flag: enFlag },
@@ -126,6 +135,13 @@ const handleCartOpen = () => {
 
 const handleCartClose = () => {
   drawer.value = false;
+};
+
+const openOrderHistoryDialog = () => {
+  orderHistoryDialogVisible.value = true;
+};
+const closeOrderHistoryDialog = () => {
+  orderHistoryDialogVisible.value = false;
 };
 </script>
 
