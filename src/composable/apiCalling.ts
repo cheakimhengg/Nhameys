@@ -29,3 +29,11 @@ export const fetchAllUsers = async () => {
 export const postOrder = async (order: object) => {
   return await fetchData('/order', order);
 };
+
+export const getCurrentOrder = async (params: object) => {
+  return await fetchData('/getcurrentorder', params);
+};
+
+export const getTableStatus = async (params: object) => {
+  return await fetchData('/tables/status', params);
+};

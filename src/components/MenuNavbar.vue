@@ -6,7 +6,10 @@
         <img :src="logo" alt="Nhamey Logo" class="h-[4.2rem] w-[4.2rem]" />
         <div class="flex flex-col">
           <span class="text-xl font-medium tracking-normal text-secondary">{{ t('menu') }}</span>
-          <el-tag effect="dark" round type="info">{{ t('closed') }}</el-tag>
+          <el-tag v-if="tableNumber" effect="dark" round type="success">
+            Table: {{ tableNumber }}
+          </el-tag>
+          <el-tag v-else effect="dark" round type="info">{{ t('closed') }}</el-tag>
         </div>
       </div>
       <div class="flex items-center gap-x-2 text-[1.05rem] pr-4 select-none">
@@ -36,17 +39,38 @@
               <el-dropdown-item disabled>{{ t('action2') }}</el-dropdown-item>
               <el-dropdown-item divided>{{ t('action5') }}</el-dropdown-item>
               <el-dropdown-item @click="openOrderHistoryDialog">View Orders</el-dropdown-item>
+              <el-dropdown-item @click="openCurrentOrderDialog">{{ t('checkCurrentOrder') }}</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+        <el-button
+          style="border: none; background-color: white"
+          @click="openCurrentOrderDialog()"
+          :title="t('checkCurrentOrder')"
+          class="hover:bg-gray-50 transition-colors duration-200"
+        >
+          <el-icon color="black" size="24">
+            <Document />
+          </el-icon>
+        </el-button>
         <el-button style="border: none; background-color: white" @click="handleCartOpen()">
           <el-icon color="black" size="30">
             <ShoppingCart />
           </el-icon>
         </el-button>
         <CartDrawer v-model:drawer="drawer" :handleCartClose="handleCartClose" />
-        <OrderHistoryDialog :visible="orderHistoryDialogVisible" :onClose="closeOrderHistoryDialog"
-          :tableId="route.params.id as string" :username="route.params.restaurant as string" />
+        <OrderHistoryDialog
+          :visible="orderHistoryDialogVisible"
+          :onClose="closeOrderHistoryDialog"
+          :tableId="route.params.id as string"
+          :username="route.params.restaurant as string"
+        />
+        <CurrentOrderDialog
+          :visible="currentOrderDialogVisible"
+          :onClose="closeCurrentOrderDialog"
+          :tableId="tableNumber"
+          :username="route.params.restaurant as string"
+        />
       </div>
     </div>
 
@@ -59,7 +83,10 @@
         </a>
         <div class="flex flex-col">
           <span class="text-xl tracking-normal">{{ t('menu') }}</span>
-          <el-tag effect="dark" round type="info">{{ t('closed') }}</el-tag>
+          <el-tag v-if="tableNumber" effect="dark" round type="success">
+            Table: {{ tableNumber }}
+          </el-tag>
+          <el-tag v-else effect="dark" round type="info">{{ t('closed') }}</el-tag>
         </div>
       </div>
 
@@ -82,6 +109,16 @@
             <ShoppingCart />
           </el-icon>
         </el-button>
+        <el-button
+          style="border: none; background-color: white"
+          @click="openCurrentOrderDialog()"
+          :title="t('checkCurrentOrder')"
+          class="hover:bg-gray-50 transition-colors duration-200"
+        >
+          <el-icon color="black" size="30">
+            <Document />
+          </el-icon>
+        </el-button>
         <CartDrawer v-model:drawer="drawer" :handleCartClose="handleCartClose" />
         <el-dropdown trigger="click">
           <el-icon size="30"> <img class="h-8 invert" :src="menu" /></el-icon>
@@ -90,19 +127,30 @@
               <el-dropdown-item>{{ t('action1') }}</el-dropdown-item>
               <el-dropdown-item disabled>{{ t('action2') }}</el-dropdown-item>
               <el-dropdown-item @click="openOrderHistoryDialog">View Orders</el-dropdown-item>
+              <el-dropdown-item @click="openCurrentOrderDialog">{{ t('checkCurrentOrder') }}</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <OrderHistoryDialog :visible="orderHistoryDialogVisible" :onClose="closeOrderHistoryDialog"
-          :tableId="route.params.id as string" :username="route.params.restaurant as string" />
+        <OrderHistoryDialog
+          :visible="orderHistoryDialogVisible"
+          :onClose="closeOrderHistoryDialog"
+          :tableId="route.params.id as string"
+          :username="route.params.restaurant as string"
+        />
+        <CurrentOrderDialog
+          :visible="currentOrderDialogVisible"
+          :onClose="closeCurrentOrderDialog"
+          :tableId="tableNumber"
+          :username="route.params.restaurant as string"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script lang="ts" setup>
-import { ArrowDown, ShoppingCart } from '@element-plus/icons-vue';
-import { ref, computed } from 'vue';
+import { ArrowDown, ShoppingCart, Document } from '@element-plus/icons-vue';
+import { ref, computed, onMounted } from 'vue';
 import CartDrawer from '@/components/CartDrawer.vue';
 import menu from '@/assets/icons/menu.png';
 import logo from '@/assets/images/logo.png';
@@ -110,10 +158,14 @@ import { useI18n } from 'vue-i18n';
 import enFlag from '@/assets/images/en.png';
 import kmFlag from '@/assets/images/km.png';
 import OrderHistoryDialog from '@/components/OrderHistoryDialog.vue';
+import CurrentOrderDialog from '@/components/CurrentOrderDialog.vue';
 import { useRoute } from 'vue-router';
+import { getTableStatus } from '@/composable/apiCalling';
 
 const drawer = ref(false);
 const orderHistoryDialogVisible = ref(false);
+const currentOrderDialogVisible = ref(false);
+const tableNumber = ref<string | null>(null);
 const { locale, t } = useI18n();
 const route = useRoute();
 
@@ -143,6 +195,28 @@ const openOrderHistoryDialog = () => {
 const closeOrderHistoryDialog = () => {
   orderHistoryDialogVisible.value = false;
 };
+
+const openCurrentOrderDialog = () => {
+  currentOrderDialogVisible.value = true;
+};
+
+const closeCurrentOrderDialog = () => {
+  currentOrderDialogVisible.value = false;
+};
+
+onMounted(async () => {
+  const tableId = route.params.id;
+  if (tableId) {
+    try {
+      const response = await getTableStatus({ tableId });
+      if (response && response.table) {
+        tableNumber.value = response.table.tableId;
+      }
+    } catch (error) {
+      console.error('Failed to fetch table status:', error);
+    }
+  }
+});
 </script>
 
 <style scoped>

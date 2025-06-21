@@ -11,6 +11,7 @@ declare module 'vue' {
     Card: typeof import('./src/components/Card.vue')['default']
     CartDrawer: typeof import('./src/components/CartDrawer.vue')['default']
     Category: typeof import('./src/components/Category.vue')['default']
+    CurrentOrderDialog: typeof import('./src/components/CurrentOrderDialog.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
